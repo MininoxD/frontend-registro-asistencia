@@ -5,6 +5,9 @@ import { AppState } from '../app.state';
 import { logOut } from '../store/user/user.actions';
 import { FormBuilder, Validators } from '@angular/forms';
 
+/* pdf */
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 interface Employee{
   code: string
@@ -20,6 +23,7 @@ interface Report{
   entry_date: string
   entry_time: string
   departure_time: string
+  time_elapsed: string
   name: string
   last_name_f: string
   last_name_m: string
@@ -35,7 +39,7 @@ interface Report{
 })
 export class DashboardComponent implements OnInit {
   /* disabled inputed */
-  disable:boolean= true
+  disable:boolean=true
   employees:Employee[] = []
 
   reportdata:Report[] =[]
@@ -191,15 +195,78 @@ export class DashboardComponent implements OnInit {
     this.http.get<Report[]>("http://localhost:8080/report")
       .subscribe(
         res => {
-          this.reportdata = res
-          console.log(res);
-
+          let res_update = res.map((r)=>{
+            if(r.departure_time){
+              let time_elapsed = this.restarHoras(r.entry_time, r.departure_time);
+              return {
+                ...r,
+                time_elapsed
+              }
+            }else{
+              return {
+                ...r,
+                time_elapsed:'No marco salida'
+              }
+            }
+          })
+          this.reportdata = res_update
         },
         error => {
         }
       )
   }
 
+  restarHoras(inicio: string, fin: string){
+      let inicioMinutos = parseInt(inicio.substr(3, 2));
+      let inicioHoras = parseInt(inicio.substr(0, 2));
 
+      let finMinutos = parseInt(fin.substr(3, 2));
+      let finHoras = parseInt(fin.substr(0, 2));
+
+      let transcurridoMinutos = finMinutos - inicioMinutos;
+      let transcurridoHoras = finHoras - inicioHoras;
+
+      if (transcurridoMinutos < 0) {
+        transcurridoHoras--;
+        transcurridoMinutos = 60 + transcurridoMinutos;
+      }
+
+      let horas = transcurridoHoras.toString();
+      let minutos = transcurridoMinutos.toString();
+
+      if (horas.length < 2) {
+        horas = "0" + horas;
+      }
+
+      if (horas.length < 2) {
+        horas = "0" + horas;
+      }
+      return horas + ":" + minutos;
+  }
+
+
+  downloadPDF(): void {
+    const alternative =  window.document.createElement("p")
+    const tabla = window.document.getElementById("htmlReport") || alternative
+    const doc = new jsPDF('p', 'pt', 'a4');
+    const options = {
+      background: 'white',
+      scale: 3
+    };
+    html2canvas(tabla, options).then((canvas) => {
+
+      const img = canvas.toDataURL('image/PNG');
+      // Add image Canvas to PDF
+      const bufferX = 15;
+      const bufferY = 15;
+      const imgProps = (doc as any).getImageProperties(img);
+      const pdfWidth = doc.internal.pageSize.getWidth() - 2 * bufferX;
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      doc.addImage(img, 'PNG', bufferX, bufferY, pdfWidth, pdfHeight, undefined, 'FAST');
+      return doc;
+    }).then((docResult) => {
+      docResult.save(`${new Date().toISOString()}_report.pdf`);
+    });
+  }
 
 }

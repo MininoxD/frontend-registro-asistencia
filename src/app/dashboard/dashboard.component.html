@@ -3,7 +3,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-light mb-3" style="background-color: #ffbe76;">
   <div class="container-fluid d-flex d-flex justify-content-between">
-    <a class="navbar-brand" href="#">Navbar</a>
+    <a class="navbar-brand" href="#">Administrador</a>
     <button type="button" class="btn btn-danger" (click)="onLogout()">logOut</button>
   </div>
 </nav>
@@ -32,6 +32,7 @@
             placeholder="Apellido materno" autocomplete="off" />
         </div>
         <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Planilla</label>
           <select formControlName="payroll" id="payroll" class="form-select">
             <option value="95443ebc-8b1b-444b-a5c5-4d33e2d91df2">Practicante</option>
             <option value="25f9d4fe-6266-4368-ab93-a2e3d3c6e79e">Cas</option>
@@ -39,6 +40,7 @@
           </select>
         </div>
         <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Modalidad</label>
           <select formControlName="modality" id="modality" class="form-select">
             <option value="9de338c1-f596-4699-a1b6-7f36db7dd561">Remoto</option>
             <option value="742dae06-40d8-447a-9d15-594de6b251fb">Mixto</option>
@@ -92,25 +94,26 @@
           <form [formGroup]="formEditEmployee" (ngSubmit)="onEdit()" class="c-employee__form-employee">
             <div class="mb-3">
               <input class="form-control" id="code" type="text" formControlName="code" placeholder="code" autocomplete="off"
-                [disabled]="disable"/>
+                readonly/>
             </div>
 
             <div class="mb-3">
-              <input class="form-control" id="name" type="text" formControlName="name" placeholder="Nombre" autocomplete="off" />
+              <input  class="form-control" id="name" type="text" formControlName="name" placeholder="Nombre" autocomplete="off" readonly/>
             </div>
 
             <div class="mb-3">
               <input class="form-control" id="last_name_f" type="text" formControlName="last_name_f"
-                placeholder="Apellido parterno" autocomplete="off" />
+                placeholder="Apellido parterno" autocomplete="off" readonly/>
             </div>
 
             <div class="mb-3">
               <input class="form-control" id="last_name_m" type="text" formControlName="last_name_m"
-                placeholder="Apellido materno" autocomplete="off" />
+                placeholder="Apellido materno" autocomplete="off" readonly/>
             </div>
 
             <div class="mb-3">
-              <select formControlName="payroll" id="payroll" class="form-select">
+              <label for="exampleInputEmail1" class="form-label">Planilla</label>
+              <select formControlName="payroll" id="payroll" class="form-select" readonly >
                 <option value="95443ebc-8b1b-444b-a5c5-4d33e2d91df2">Practicante</option>
                 <option value="25f9d4fe-6266-4368-ab93-a2e3d3c6e79e">Cas</option>
                 <option value="c4595404-83cd-4ddb-b007-7f73295bc9cd">CASP</option>
@@ -118,7 +121,7 @@
             </div>
 
             <div class="mb-3">
-
+              <label for="exampleInputEmail1" class="form-label">Modalidad</label>
               <select formControlName="modality" id="modality" class="form-select">
                 <option value="9de338c1-f596-4699-a1b6-7f36db7dd561">Remoto</option>
                 <option value="742dae06-40d8-447a-9d15-594de6b251fb">Mixto</option>
@@ -139,9 +142,10 @@
 <div class="container">
   <div class="d-flex justify-content-between mb-3">
     <p class="f-4 fw-bold">Opciones</p>
-    <button class="btn btn-warning"type="button">Descargar Pdf</button>
+    <button class="btn btn-warning"type="button" (click)="downloadPDF()">Descargar Pdf</button>
   </div>
-  <table class="table table-striped">
+
+  <table class="table table-striped" id="htmlReport">
     <thead class="thead-dark">
       <tr>
         <th>Nombre</th>
@@ -166,8 +170,8 @@
       <td>{{report.entry_time}}</td>
       <td *ngIf="report.departure_time">{{report.departure_time}}</td>
       <td *ngIf="!report.departure_time">No marco salida</td>
-      <td *ngIf="report.departure_time">{{report.departure_time}}</td>
-      <td *ngIf="!report.departure_time">No hay salida</td>
+      <td *ngIf="report.time_elapsed">{{report.time_elapsed}}</td>
+      <td *ngIf="!report.time_elapsed">No hay salida</td>
     </tr>
     </tbody>
   </table>

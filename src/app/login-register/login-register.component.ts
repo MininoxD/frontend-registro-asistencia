@@ -170,6 +170,22 @@ export class LoginRegisterComponent implements OnInit {
     )
   }
 
+  onExisteAsistenciaNow(){
+    this.http.get(`http://localhost:8080/registrationexist/${this.employee.code}`)
+    .subscribe(
+      res => {
+
+        this.statusError = true;
+        this.error = "Ud ya Marco asistencia hoy"
+      },
+      err => {
+        console.log(err);
+        this.onGetAsistencia()
+      }
+    )
+  }
+
+
   onAsistecia(){
     let code = this.formAsistencia.value.code
     this.http.get <Employeedisplay>(`http://localhost:8080/employee/${code}`)
@@ -177,7 +193,7 @@ export class LoginRegisterComponent implements OnInit {
       res => {
         this.employee = res
         this.statusEmployee = true
-        this.onGetAsistencia()
+        this.onExisteAsistenciaNow()
         this.formAsistencia.setValue({ code: '' })
       },
       err => {

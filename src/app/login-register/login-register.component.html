@@ -20,6 +20,7 @@
       </form>
     </div>
     <div class="col-6 d-flex flex-column justify-content-center align-items-center vh-100 bg-success p-2 text-dark bg-opacity-25">
+      <p class="fs-3 text-center fw-bold text-primary">- MARCAR ASISTENCIA -</p>
       <form [formGroup]="formAsistencia" (ngSubmit)="onAsistecia()" class="w-50" *ngIf="!statusEmployee">
         <div class="mb-4">
           <label for="exampleInputEmail1" class="form-label">Codigo de Empleado</label>

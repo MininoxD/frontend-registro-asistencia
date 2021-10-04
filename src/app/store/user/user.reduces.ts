@@ -6,7 +6,7 @@ export const initialState:User = {
   name: '',
   last_name_f: '',
   last_name_m: '',
-  isLogin: true,
+  isLogin: false,
   isLoading:false,
   error:'',
   employeeCode:''
