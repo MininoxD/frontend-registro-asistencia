@@ -1,0 +1,183 @@
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light mb-3" style="background-color: #ffbe76;">
+  <div class="container-fluid d-flex d-flex justify-content-between">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button type="button" class="btn btn-danger" (click)="onLogout()">logOut</button>
+  </div>
+</nav>
+
+<div class="container-fluid mb-5">
+  <div class="row">
+    <div class="col-3">
+      <form [formGroup]="formEmployee" (ngSubmit)="onSubmit()" >
+        <div class="mb-3">
+          <input class="form-control" id="code" type="text" formControlName="code" placeholder="Codigo"
+            autocomplete="off" />
+        </div>
+
+        <div class="mb-3">
+          <input class="form-control" id="name" type="text" formControlName="name" placeholder="Nombre"
+            autocomplete="off" />
+        </div>
+
+        <div class="mb-3">
+          <input class="form-control" id="last_name_f" type="text" formControlName="last_name_f"
+            placeholder="Apellido parterno" autocomplete="off" />
+        </div>
+
+        <div class="mb-3">
+          <input class="form-control" id="last_name_m" type="text" formControlName="last_name_m"
+            placeholder="Apellido materno" autocomplete="off" />
+        </div>
+        <div class="mb-3">
+          <select formControlName="payroll" id="payroll" class="form-select">
+            <option value="95443ebc-8b1b-444b-a5c5-4d33e2d91df2">Practicante</option>
+            <option value="25f9d4fe-6266-4368-ab93-a2e3d3c6e79e">Cas</option>
+            <option value="c4595404-83cd-4ddb-b007-7f73295bc9cd">CASP</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <select formControlName="modality" id="modality" class="form-select">
+            <option value="9de338c1-f596-4699-a1b6-7f36db7dd561">Remoto</option>
+            <option value="742dae06-40d8-447a-9d15-594de6b251fb">Mixto</option>
+            <option value="0fc1d51a-2b79-4ca2-8d2d-ea7463a94911">Presencial</option>
+          </select>
+        </div>
+        <div class="d-flex justify-content-center">
+          <button class="btn btn-success" type="submit" [disabled]="!formEmployee.valid">Agregar</button>
+        </div>
+      </form>
+    </div>
+    <div class="col-9">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">code</th>
+            <th scope="col">Apellido Paterno</th>
+            <th scope="col">Apellido Materno</th>
+            <th scope="col">Planilla</th>
+            <th scope="col">Modalidad</th>
+            <th scope="col">Options</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let employee of employees;let i = index">
+            <th scope="row">{{i+1}}</th>
+            <td>{{employee.code}}</td>
+            <td>{{employee.name}}</td>
+            <td>{{employee.last_name_f}}</td>
+            <td>{{employee.last_name_m}}</td>
+            <td>{{employee.payroll}}</td>
+            <td>{{employee.modality}}</td>
+            <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="onSelectData(employee)">Editar</button>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!-- modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Editar uno</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+          <form [formGroup]="formEditEmployee" (ngSubmit)="onEdit()" class="c-employee__form-employee">
+            <div class="mb-3">
+              <input class="form-control" id="code" type="text" formControlName="code" placeholder="code" autocomplete="off"
+                [disabled]="disable"/>
+            </div>
+
+            <div class="mb-3">
+              <input class="form-control" id="name" type="text" formControlName="name" placeholder="Nombre" autocomplete="off" />
+            </div>
+
+            <div class="mb-3">
+              <input class="form-control" id="last_name_f" type="text" formControlName="last_name_f"
+                placeholder="Apellido parterno" autocomplete="off" />
+            </div>
+
+            <div class="mb-3">
+              <input class="form-control" id="last_name_m" type="text" formControlName="last_name_m"
+                placeholder="Apellido materno" autocomplete="off" />
+            </div>
+
+            <div class="mb-3">
+              <select formControlName="payroll" id="payroll" class="form-select">
+                <option value="95443ebc-8b1b-444b-a5c5-4d33e2d91df2">Practicante</option>
+                <option value="25f9d4fe-6266-4368-ab93-a2e3d3c6e79e">Cas</option>
+                <option value="c4595404-83cd-4ddb-b007-7f73295bc9cd">CASP</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+
+              <select formControlName="modality" id="modality" class="form-select">
+                <option value="9de338c1-f596-4699-a1b6-7f36db7dd561">Remoto</option>
+                <option value="742dae06-40d8-447a-9d15-594de6b251fb">Mixto</option>
+                <option value="0fc1d51a-2b79-4ca2-8d2d-ea7463a94911">Presencial</option>
+              </select>
+            </div>
+            <div class="d-flex justify-content-center">
+              <button class="btn btn-success" data-bs-dismiss="modal" type="submit" [disabled]="!formEditEmployee.valid">Guar dar Cambios</button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="d-flex justify-content-between mb-3">
+    <p class="f-4 fw-bold">Opciones</p>
+    <button class="btn btn-warning"type="button">Descargar Pdf</button>
+  </div>
+  <table class="table table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th>Nombre</th>
+        <th>Apellido Paterno</th>
+        <th>Apellido Materno</th>
+        <th>Planilla</th>
+        <th>Modalidad</th>
+        <th>Fecha</th>
+        <th>Hora entrada</th>
+        <th>Hora de Salida</th>
+        <th>Transcurrida</th>
+      </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let report of reportdata">
+      <td>{{report.name}}</td>
+      <td>{{report.last_name_f}}</td>
+      <td>{{report.last_name_m}}</td>
+      <td>{{report.name_payroll}}</td>
+      <td>{{report.name_modality}}</td>
+      <td>{{report.entry_date}}</td>
+      <td>{{report.entry_time}}</td>
+      <td *ngIf="report.departure_time">{{report.departure_time}}</td>
+      <td *ngIf="!report.departure_time">No marco salida</td>
+      <td *ngIf="report.departure_time">{{report.departure_time}}</td>
+      <td *ngIf="!report.departure_time">No hay salida</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+
+
+
+
+
+
+
+
